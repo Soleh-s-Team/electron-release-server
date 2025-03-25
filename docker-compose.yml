@@ -3,41 +3,70 @@ services:
   web:
     build: .
     environment:
-      WEBSITE_TITLE: 'Test Title'
-      WEBSITE_HOME_CONTENT: 'Test Content'
+      WEBSITE_TITLE: 'New OMS Updater'
+      WEBSITE_HOME_CONTENT: 'New OMS Updater'
       WEBSITE_NAV_LOGO: ''
-      WEBSITE_APP_TITLE: 'Test App Title'
-      APP_USERNAME: username
-      APP_PASSWORD: password
-      DB_HOST: db
+      WEBSITE_APP_TITLE: 'New OMS Updater'
+      APP_USERNAME: solehhambaly45@gmail.com
+      APP_PASSWORD: IsmayaGroup2025@
+      DB_HOST: postgredb
       DB_PORT: 5432
-      DB_USERNAME: releaseserver
-      DB_NAME: releaseserver
-      DB_PASSWORD: secret
+      DB_USERNAME: electron_core
+      DB_NAME: electron_core_db
+      DB_PASSWORD: E1D72E3A8C76648F8F47FC6EE2D32DA9F02CA14D7A37A9904B862ACEE8992DBF
       # DEKs should be 32 bytes long, and cryptographically random.
       # You can generate such a key by running the following:
       #   require('crypto').randomBytes(32).toString('base64')
       # PLEASE ENSURE THAT YOU CHANGE THIS VALUE IN PRODUCTION
-      DATA_ENCRYPTION_KEY: oIh0YgyxQbShuMjw4/laYcZnGKzvC3UniWFsqL0t4Zs=
+      DATA_ENCRYPTION_KEY: 8BC6FB9E04CC928B72997540E421FE31B17C6036753B26994BA39D7849C8EB42
       # Recommended: 63 random alpha-numeric characters
       # Generate using: https://www.grc.com/passwords.htm
-      TOKEN_SECRET: change_me_in_production
+      TOKEN_SECRET: :<lm-PB_(O;4D.WvaXi/e+}uf(|ad&:DwRt2uLS(^W8>~oqyT1XHlsmYNqM3pch
       APP_URL: 'localhost:8080'
       ASSETS_PATH: '/usr/src/electron-release-server/releases'
     depends_on:
-      - db
+      - postgredb
     ports:
       - '8080:80'
-    entrypoint: ./scripts/wait.sh db:5432 -- npm start
+    entrypoint: ./scripts/wait.sh postgredb:5432 -- npm start
     volumes:
       - ./releases:/usr/src/electron-release-server/releases
-  db:
+    networks:
+      - postgres
+  postgredb:
     image: postgres:11
+    container_name: postgredb
     environment:
-      POSTGRES_PASSWORD: secret
-      POSTGRES_USER: releaseserver
+      POSTGRES_PASSWORD: E1D72E3A8C76648F8F47FC6EE2D32DA9F02CA14D7A37A9904B862ACEE8992DBF
+      POSTGRES_USER: electron_core
+      POSTGRES_DB: electron_core_db
+    ports:
+      - "5432:5432"
     volumes:
       - postgres:/var/lib/postgresql/data
+    networks:
+      - postgres
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-solehhambaly45@gmail.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-$2a$12$1EMOieOmGrkiiy9keUrOSO/PIeFp2bVI/fMERJ0OgVZTubtxySFWO}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MAX_UPLOAD_SIZE: 304857600
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
 
 volumes:
   postgres:
+  pgadmin:
