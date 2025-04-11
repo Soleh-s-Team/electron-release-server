@@ -24,6 +24,7 @@ services:
       TOKEN_SECRET: :<lm-PB_(O;4D.WvaXi/e+}uf(|ad&:DwRt2uLS(^W8>~oqyT1XHlsmYNqM3pch
       APP_URL: 'localhost:8080'
       ASSETS_PATH: '/usr/src/electron-release-server/releases'
+      ENDPOINT_URL: 'https://oms-auto-updater.labstech.asia'
     depends_on:
       - postgredb
     ports:

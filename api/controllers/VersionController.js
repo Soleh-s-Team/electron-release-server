@@ -515,11 +515,11 @@ module.exports = {
 
           var latestYml = "version: " + latestVersion.name
                           + "\nfiles:"
-                          + "\n  - url: " + downloadPath
+                          + "\n  - url: " + process.env.ENDPOINT_URL + downloadPath
                           + "\n    sha512: " + sha512
                           + "\n    size: " + asset.size
                           + "\nreleaseDate: " + latestVersion.updatedAt
-                          + "\npath: " + downloadPath
+                          + "\npath: " + process.env.ENDPOINT_URL + downloadPath
                           + "\nsha512: " + sha512
                           + "\nsize: " + asset.size;
 
